@@ -8,13 +8,13 @@ const HOSTED_URLS = {
 
 const examples = {
   'example1':
-      'Alice was beginning to get very tired of sitting by her sister on the bank.',
+      'You dont know about me without you have read a book by the name of The Adventures of Tom Sawyer.',
   'example2':
-      'Buda-Pesth seems a wonderful place.',
+      'You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings.',
   'example3':
-      'Scepticism was as much the result of knowledge, as knowledge is of scepticism.',
+      'It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.',
   'example4':
-      'Sometimes that star explodes and kills us all along with it' 
+      'In the year 1878 I took my degree of Doctor of Medicine of the University of London, and proceeded to Netley to go through the course prescribed for surgeons in the army.' 
 };
 
 
