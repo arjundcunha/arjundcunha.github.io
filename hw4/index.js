@@ -14,9 +14,8 @@ const examples = {
   'example3':
       'You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings.',
   'example4':
-      'In the year 1878 I took my degree of Doctor of Medicine of the University of London, and proceeded to Netley to go through the course prescribed for surgeons in the army.' 
+      'Sherlock Holmes gave a sigh of relief and relaxed into a smile.' 
 };
-
 
 function status(statusText) {
   console.log(statusText);
