@@ -48,6 +48,9 @@ function doPredict(predict) {
   const textField = document.getElementById('text-entry');
   const result = predict(textField.value);
   score_string = "Class scores: ";
+
+  console.log("SCORE");
+  console.log(result.score)
   for (var x in result.score) {
     var temp = parseInt(parseFloat(result.score[x].toFixed(4))*255,10)
     score_string += x + " ->  " + temp + ", "
@@ -136,6 +139,8 @@ class Classifier {
 
     status('Running inference');
     const beginMs = performance.now();
+    console.log("INPUT");
+    console.log(input);
     const predictOut = this.model.predict(input);
     console.log(predictOut.dataSync());
     const score = predictOut.dataSync();
