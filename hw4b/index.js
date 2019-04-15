@@ -61,7 +61,11 @@ function doPredict(predict) {
 
   var c = document.getElementById("myCanvas");
   var ctx = c.getContext("2d");
-  ctx.fillStyle = "#FF0000";
+  var red = 217
+  var blu = 133
+  var gre = 134
+  ctx.fillStyle = "#" + red.toString(16) + gre.toString(16) + blu.toString(16);
+  console.log(ctx.fillStyle)
   ctx.fillRect(20, 20, 150, 100);
 }
 
