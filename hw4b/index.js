@@ -58,6 +58,11 @@ function doPredict(predict) {
   //console.log(score_string);
   status(
       score_string + ' elapsed: ' + result.elapsed.toFixed(4) + ' ms)');
+
+  var c = document.getElementById("myCanvas");
+  var ctx = c.getContext("2d");
+  ctx.fillStyle = "#FF0000";
+  ctx.fillRect(20, 20, 150, 100);
 }
 
 function prepUI(predict) {
