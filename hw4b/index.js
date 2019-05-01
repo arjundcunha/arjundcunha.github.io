@@ -1,4 +1,5 @@
 
+
 const HOSTED_URLS = {
   model:
       'model_js/model.json',
@@ -6,20 +7,15 @@ const HOSTED_URLS = {
       'model_js/metadata.json'
 };
 
-const examples = {
-  'example1':
-      'Light Blue',
-  'example2':
-      'Blue',
-  'example3':
-      'Dark Blue',
-  'example4':
-      'Tensorflow Orange' 
-};
+function color(r, g, b) {
+  var color = "rgb(" + r + "," + g + "," + b + ")";
+  document.getElementById('color-space').style.backgroundColor=color;
+}
+
 
 function status(statusText) {
   console.log(statusText);
-  document.getElementById('status').textContent = statusText;
+  document.getElementById('status').innerHTML = statusText;
 }
 
 function showMetadata(metadataJSON) {
@@ -36,46 +32,44 @@ function settextField(text, predict) {
 }
 
 function setPredictFunction(predict) {
-  const textField = document.getElementById('text-entry');
-  textField.addEventListener('input', () => doPredict(predict));
+  const colorButton = document.getElementById('display-color');
+  colorButton.addEventListener('click', () => doPredict(predict));
 }
 
 function disableLoadModelButtons() {
   document.getElementById('load-model').style.display = 'none';
 }
 
+function scale(n) {
+  return parseInt(n*255.0);
+}
+
 function doPredict(predict) {
   const textField = document.getElementById('text-entry');
   const result = predict(textField.value);
-  score_string = "Class scores: ";
-
-  console.log("SCORE");
-  console.log(result.score)
-  for (var x in result.score) {
-    var temp = parseInt(parseFloat(result.score[x].toFixed(4))*255,10)
-    score_string += x + " ->  " + temp + ", "
-  }
-  //console.log(score_string);
+  color_string = "RGB values: ";
+  console.log(result.score);
+  var r = result.score[0], g = result.score[1], b = result.score[2];
+  r = scale(r);
+  g = scale(g);
+  b = scale(b);
+  
+  var score_string = "Predicted RGB: ("
+  console.log("r: " + r + ", g: " + g + ", b: " + b);
   status(
-      score_string + ' elapsed: ' + result.elapsed.toFixed(4) + ' ms)');
-
-  var c = document.getElementById("myCanvas");
-  var ctx = c.getContext("2d");
-  var red = 217
-  var blu = 133
-  var gre = 134
-  ctx.fillStyle = "#" + red.toString(16) + gre.toString(16) + blu.toString(16);
-  console.log(ctx.fillStyle)
-  ctx.fillRect(20, 20, 150, 100);
+      score_string + r + ',' + g + ',' + b + ')<br>' + 'Elapsed: ' + result.elapsed.toFixed(4) + ' ms');
+  color(r, g, b);
 }
 
 function prepUI(predict) {
   setPredictFunction(predict);
+  /*
   const testExampleSelect = document.getElementById('example-select');
   testExampleSelect.addEventListener('change', () => {
     settextField(examples[testExampleSelect.value], predict);
   });
   settextField(examples['example1'], predict);
+  */
 }
 
 async function urlExists(url) {
@@ -124,8 +118,7 @@ class Classifier {
   }
 
   async loadMetadata() {
-    const metadata =
-        await loadHostedMetadata(this.urls.metadata);
+    const metadata = await loadHostedMetadata(this.urls.metadata);
     showMetadata(metadata);
     this.maxLen = metadata['max_len'];
     console.log('maxLen = ' + this.maxLen);
@@ -135,23 +128,23 @@ class Classifier {
   predict(text) {
     // Convert to lower case and remove all punctuations.
     const inputText =
-        text.trim().toLowerCase().replace(/(\.|\,|\!)/g, '').split(' ');
+        text.trim().toLowerCase().replace(/(\.|\,|\!)/g, '').split('');
     // Look up word indices.
     const inputBuffer = tf.buffer([1, this.maxLen], 'float32');
     for (let i = 0; i < inputText.length; ++i) {
       const word = inputText[i];
-      inputBuffer.set(this.wordIndex[word], 0, i);
+      inputBuffer.set(this.wordIndex[word], 0, this.maxLen - inputText.length + i);
       console.log(word, this.wordIndex[word], inputBuffer);
     }
-    console.log(inputBuffer);
     const input = inputBuffer.toTensor();
     console.log(input);
 
     status('Running inference');
     const beginMs = performance.now();
+    //console.log(this.model);
     const predictOut = this.model.predict(input);
-    console.log(predictOut.dataSync());
-    const score = predictOut.dataSync();
+    //console.log(predictOut.dataSync());
+    const score = predictOut.dataSync();//[0];
     predictOut.dispose();
     const endMs = performance.now();
 
